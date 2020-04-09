@@ -47,7 +47,7 @@ spec:
 kubectl apply -f macvlan-conf-1.yaml
 ```
 
-3. 使用Multus CNI部署多接口POD
+## 3. 使用Multus CNI部署多接口POD
 ```
 vi pod-case-01.yaml
 apiVersion: v1
