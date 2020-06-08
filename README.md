@@ -13,6 +13,7 @@ git clone https://github.com/intel/multus-cni.git
 ```
 cd multus-cni/images
 cat {flannel-daemonset.yml,multus-daemonset.yml} | kubectl apply -f -
+cd ../..
 ```
 
 在K8S环境中配置额外的CNI插件
@@ -20,49 +21,17 @@ cat {flannel-daemonset.yml,multus-daemonset.yml} | kubectl apply -f -
 $ ifconfig | grep ens
 ensXXX      Link encap:Ethernet  HWaddr 02:42:ac:11:00:07
 
+git clone https://github.com/yu3peng/Kubernetes-Multus-CNI.git
+cd Kubernetes-Multus-CNI
+
 vi macvlan-conf-1.yaml
-apiVersion: "k8s.cni.cncf.io/v1"
-kind: NetworkAttachmentDefinition
-metadata:
-  name: macvlan-conf-1
-spec:
-  config: '{
-            "cniVersion": "0.3.0",
-            "type": "macvlan",
-            "master": "ensXXX",
-            "mode": "bridge",
-            "ipam": {
-                "type": "host-local",
-                "ranges": [
-                    [ {
-                         "subnet": "10.10.0.0/16",
-                         "rangeStart": "10.10.1.20",
-                         "rangeEnd": "10.10.3.50",
-                         "gateway": "10.10.0.254"
-                    } ]
-                ]
-            }
-        }'
+替换文件中的ensXXX为通过ifconfig查询到的值
 
 kubectl apply -f macvlan-conf-1.yaml
 ```
 
 ## 3. 使用Multus CNI部署多接口POD
 ```
-vi pod-case-01.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pod-case-01
-  annotations:
-    k8s.v1.cni.cncf.io/networks: macvlan-conf-1
-spec:
-  containers:
-  - name: pod-case-01
-    image: docker.io/centos/tools:latest
-    command:
-    - /sbin/init
-
 kubectl apply -f pod-case-01.yaml 
 ```
 
