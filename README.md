@@ -57,3 +57,6 @@ kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future versi
     inet 10.10.1.21/16 scope global net1
        valid_lft forever preferred_lft forever
 ```
+
+## 4. 参考
+1. [Kubernetes Multus-CNI](https://blog.csdn.net/u010827484/article/details/86824497)
